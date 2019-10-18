@@ -56,9 +56,18 @@ class Transfer {
   final int accountNumber;
 
   Transfer(this.transferValue, this.accountNumber);
+
+  @override
+  String toString() {
+    return 'Transfer {transferValue: $transferValue, accountNumber: $accountNumber}';
+  }
 }
 
 class TransferForm extends StatelessWidget {
+  final TextEditingController _accountNumberControlller =
+      TextEditingController();
+  final TextEditingController _valueControlller = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,6 +80,7 @@ class TransferForm extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 0.0),
             child: TextField(
               maxLength: 4,
+              controller: _accountNumberControlller,
               decoration: InputDecoration(
                 labelText: 'Número da conta',
                 hintText: '0000',
@@ -81,6 +91,7 @@ class TransferForm extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 24.0),
             child: TextField(
+              controller: _valueControlller,
               decoration: InputDecoration(
                 icon: Icon(Icons.attach_money),
                 labelText: 'Valor',
@@ -90,8 +101,21 @@ class TransferForm extends StatelessWidget {
             ),
           ),
           RaisedButton(
-            onPressed: () {},
-            child: Text('Confirmar'),
+            onPressed: () {
+              final int accountNumber =
+                  int.tryParse(_accountNumberControlller.text);
+              final double transferValue =
+                  double.tryParse(_valueControlller.text);
+
+              if (accountNumber != null && transferValue != null) {
+                final t = Transfer(transferValue, accountNumber);
+                debugPrint('$t');
+              }
+            },
+            child: Text(
+              'Confirmar',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ],
       ),
