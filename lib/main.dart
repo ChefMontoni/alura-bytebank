@@ -65,7 +65,36 @@ class TransferForm extends StatelessWidget {
       appBar: AppBar(
         title: Text('Criar transferência'),
       ),
-      body: Text('Nova tela'),
+      body: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 0.0),
+            child: TextField(
+              maxLength: 4,
+              decoration: InputDecoration(
+                labelText: 'Número da conta',
+                hintText: '0000',
+              ),
+              keyboardType: TextInputType.number,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 24.0),
+            child: TextField(
+              decoration: InputDecoration(
+                icon: Icon(Icons.attach_money),
+                labelText: 'Valor',
+                hintText: '100.00',
+              ),
+              keyboardType: TextInputType.number,
+            ),
+          ),
+          RaisedButton(
+            onPressed: () {},
+            child: Text('Confirmar'),
+          ),
+        ],
+      ),
     );
   }
 }
