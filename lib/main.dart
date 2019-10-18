@@ -7,6 +7,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        body: Column(
+          children: <Widget>[
+            Card(
+              child: ListTile(
+                leading: Icon(Icons.attach_money),
+                title: Text('100'),
+                subtitle: Text('1000'),
+              ),
+            ),
+          ],
+        ),
         appBar: AppBar(
           title: Text('Transferências'),
         ),
