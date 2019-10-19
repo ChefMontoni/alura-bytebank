@@ -6,9 +6,14 @@ class BytebankApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: TransferList(),
-      ),
+      theme: ThemeData(
+          primaryColor: Colors.green[900],
+          accentColor: Colors.blue[700],
+          buttonTheme: ButtonThemeData(
+            buttonColor: Colors.blue[700],
+            textTheme: ButtonTextTheme.primary,
+          )),
+      home: TransferList(),
     );
   }
 }
@@ -121,12 +126,8 @@ class TransferFormState extends State<TransferForm> {
             Padding(
               padding: const EdgeInsets.all(24.0),
               child: RaisedButton(
-                color: Colors.lightBlue,
                 onPressed: () => _createTransfer(context),
-                child: Text(
-                  'Confirmar',
-                  style: TextStyle(color: Colors.white),
-                ),
+                child: Text('Confirmar'),
               ),
             ),
           ],
