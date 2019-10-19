@@ -6,9 +6,11 @@ class BytebankApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: TransferList(),
-      ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => TransferList(),
+        '/newTransfer': (context) => TransferForm(),
+      },
     );
   }
 }
@@ -38,10 +40,7 @@ class TransferList extends StatelessWidget {
   }
 
   void navigate(BuildContext context, List<Transfer> transferList) {
-    final Future<Transfer> future =
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return TransferForm();
-    }));
+    final Future future = Navigator.pushNamed(context, '/newTransfer');
 
     future.then((newTransfer) {
       transferList.add(newTransfer);
