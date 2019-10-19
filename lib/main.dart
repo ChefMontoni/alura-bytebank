@@ -39,13 +39,15 @@ class TransferListState extends State<TransferList> {
 
           future.then((newTransfer) {
             if (newTransfer != null) {
-              widget._transferList.add(newTransfer);
+              setState(() {
+                widget._transferList.add(newTransfer);
+              });
             }
           });
         },
       ),
       body: ListView.builder(
-        padding: EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(6.0),
         itemCount: widget._transferList.length,
         itemBuilder: (context, index) {
           final transfer = widget._transferList[index];
@@ -85,10 +87,16 @@ class Transfer {
   }
 }
 
-class TransferForm extends StatelessWidget {
-  final TextEditingController _accountNumberControlller =
-      TextEditingController();
-  final TextEditingController _valueControlller = TextEditingController();
+class TransferForm extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return TransferFormState();
+  }
+}
+
+class TransferFormState extends State<TransferForm> {
+  final TextEditingController _accountNumberRef = TextEditingController();
+  final TextEditingController _valueRef = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -96,38 +104,40 @@ class TransferForm extends StatelessWidget {
       appBar: AppBar(
         title: Text('Criar transferência'),
       ),
-      body: Column(
-        children: <Widget>[
-          TextEditor(
-            controller: _accountNumberControlller,
-            label: 'Número da conta',
-            hint: '0000',
-          ),
-          TextEditor(
-            controller: _valueControlller,
-            icon: Icons.attach_money,
-            label: 'Valor',
-            hint: '100.00',
-          ),
-          Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: RaisedButton(
-              color: Colors.lightBlue,
-              onPressed: () => _createTransfer(context),
-              child: Text(
-                'Confirmar',
-                style: TextStyle(color: Colors.white),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            TextEditor(
+              controller: _accountNumberRef,
+              label: 'Número da conta',
+              hint: '0000',
+            ),
+            TextEditor(
+              controller: _valueRef,
+              icon: Icons.attach_money,
+              label: 'Valor',
+              hint: '100.00',
+            ),
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: RaisedButton(
+                color: Colors.lightBlue,
+                onPressed: () => _createTransfer(context),
+                child: Text(
+                  'Confirmar',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   void _createTransfer(BuildContext context) {
-    final int accountNumber = int.tryParse(_accountNumberControlller.text);
-    final double transferValue = double.tryParse(_valueControlller.text);
+    final int accountNumber = int.tryParse(_accountNumberRef.text);
+    final double transferValue = double.tryParse(_valueRef.text);
 
     if (accountNumber != null && transferValue != null) {
       final newTransfer = Transfer(transferValue, accountNumber);
