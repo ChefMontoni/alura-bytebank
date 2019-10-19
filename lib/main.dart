@@ -14,6 +14,8 @@ class BytebankApp extends StatelessWidget {
 }
 
 class TransferList extends StatelessWidget {
+  final List<Transfer> _transferList = List();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,25 +24,27 @@ class TransferList extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => navigate(context),
+        onPressed: () => navigate(context, _transferList),
       ),
-      body: Column(
-        children: <Widget>[
-          TransferItem(Transfer(100.00, 1000)),
-          TransferItem(Transfer(300.00, 1000)),
-        ],
+      body: ListView.builder(
+        padding: EdgeInsets.all(8.0),
+        itemCount: _transferList.length,
+        itemBuilder: (context, index) {
+          final transfer = _transferList[index];
+          return TransferItem(transfer);
+        },
       ),
     );
   }
 
-  void navigate(BuildContext context) {
+  void navigate(BuildContext context, List<Transfer> transferList) {
     final Future<Transfer> future =
         Navigator.push(context, MaterialPageRoute(builder: (context) {
       return TransferForm();
     }));
 
     future.then((newTransfer) {
-      debugPrint('$newTransfer');
+      transferList.add(newTransfer);
     });
   }
 }
