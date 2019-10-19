@@ -6,18 +6,23 @@ class BytebankApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/',
-      routes: {
-        '/': (context) => TransferList(),
-        '/newTransfer': (context) => TransferForm(),
-      },
+      home: Scaffold(
+        body: TransferList(),
+      ),
     );
   }
 }
 
-class TransferList extends StatelessWidget {
+class TransferList extends StatefulWidget {
   final List<Transfer> _transferList = List();
 
+  @override
+  State<StatefulWidget> createState() {
+    return TransferListState();
+  }
+}
+
+class TransferListState extends State<TransferList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,25 +31,28 @@ class TransferList extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () => navigate(context, _transferList),
+        onPressed: () {
+          final Future<Transfer> future =
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return TransferForm();
+          }));
+
+          future.then((newTransfer) {
+            if (newTransfer != null) {
+              widget._transferList.add(newTransfer);
+            }
+          });
+        },
       ),
       body: ListView.builder(
         padding: EdgeInsets.all(8.0),
-        itemCount: _transferList.length,
+        itemCount: widget._transferList.length,
         itemBuilder: (context, index) {
-          final transfer = _transferList[index];
+          final transfer = widget._transferList[index];
           return TransferItem(transfer);
         },
       ),
     );
-  }
-
-  void navigate(BuildContext context, List<Transfer> transferList) {
-    final Future future = Navigator.pushNamed(context, '/newTransfer');
-
-    future.then((newTransfer) {
-      transferList.add(newTransfer);
-    });
   }
 }
 
@@ -105,7 +113,7 @@ class TransferForm extends StatelessWidget {
             padding: const EdgeInsets.all(24.0),
             child: RaisedButton(
               color: Colors.lightBlue,
-              onPressed: () => createTransfer(context),
+              onPressed: () => _createTransfer(context),
               child: Text(
                 'Confirmar',
                 style: TextStyle(color: Colors.white),
@@ -117,7 +125,7 @@ class TransferForm extends StatelessWidget {
     );
   }
 
-  void createTransfer(BuildContext context) {
+  void _createTransfer(BuildContext context) {
     final int accountNumber = int.tryParse(_accountNumberControlller.text);
     final double transferValue = double.tryParse(_valueControlller.text);
 
